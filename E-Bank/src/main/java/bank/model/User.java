@@ -1,54 +1,75 @@
 package bank.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Component
+@Scope("prototype")
 @Entity
 @Table(name = "utilisateur")
-public class User {
+public class User  implements UserDetails  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
     private String nom;
     private String email;
-    private String motDePasse;
+    private String password;
 
-    @OneToMany(mappedBy = "user")
-    private List<CompteBancaire> comptes;
 
-    public int getUserId() {
-        return userId;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CompteBancaire> comptes =new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    @Override
+    public String getPassword() {
+        return this.password;
     }
 
-    public String getNom() {
-        return nom;
+    @Override
+    public String getUsername() {
+        return this.email;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
     }
 
-    public String getEmail() {
-        return email;
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
     }
 
-    public String getMotDePasse() {
-        return motDePasse;
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
     }
-
-    public void setMotDePasse(String motDePasse) {
-        this.motDePasse = motDePasse;
-    }
-
     public List<CompteBancaire> getComptes() {
         return comptes;
     }
