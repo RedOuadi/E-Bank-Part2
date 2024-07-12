@@ -38,7 +38,7 @@ public class  EBankApplicationTests {
 		User user = new User();
 		user.setNom(userDTO.getNom());
 		user.setEmail(userDTO.getEmail());
-		user.setMotDePasse(userDTO.getMotDePasse());
+		user.setPassword(userDTO.getMotDePasse());
 
 		when(userRepository.save(any(User.class))).thenReturn(user);
 
@@ -48,7 +48,7 @@ public class  EBankApplicationTests {
 
 		assertEquals("John Doe", createdUser.getNom());
 		assertEquals("john.doe@example.com", createdUser.getEmail());
-		assertEquals("password123", createdUser.getMotDePasse());
+		assertEquals("password123", createdUser.getPassword());
 
 		verify(userRepository, times(1)).save(any(User.class));
 	}
