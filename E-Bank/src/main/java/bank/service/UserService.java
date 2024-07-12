@@ -20,7 +20,7 @@ public class UserService {
         User user = new User();
         user.setNom(userDTO.getNom());
         user.setEmail(userDTO.getEmail());
-        user.setMotDePasse(userDTO.getMotDePasse());
+        user.setPassword(userDTO.getMotDePasse());
         return userRepository.save(user);
     }
 
